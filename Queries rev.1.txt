@@ -1,0 +1,54 @@
+/* Query 1 */rev1
+SELECT e.EmployeeId,e.FirstName,e.LastName, count(DISTINCT c.CustomerId) as cust, count(DISTINCT i.InvoiceId) as INV
+FROM Invoice as i
+JOIN Customer as c
+ON c.CustomerId=i.CustomerId
+JOIN Employee as e
+ON e.EmployeeId=c.SupportRepId
+GROUP by e.EmployeeId,e.FirstName,e.LastName
+ORDER by inv DESC
+
+/* Query 2 */rev1
+SELECT  strftime('%Y',i.InvoiceDate) as dd, count(DISTINCT i.InvoiceId) as rock_inv, 
+sum(il.UnitPrice * il.Quantity) as rock_earning
+FROM Genre as g
+JOIN Track as t
+ON t.GenreId=g.GenreId
+JOIN InvoiceLine as il
+ON il.TrackId=t.TrackId
+JOIN Invoice as i
+ON i.InvoiceId=il.InvoiceId
+WHERE g.Name = 'Rock' 
+GROUP by dd
+
+
+
+/* Query 3 */rev0
+SELECT DISTINCT al.ArtistId,a.Name , count(TrackId) as cnt
+FROM Genre as g
+JOIN Track as t
+ON t.GenreId=g.GenreId
+JOIN Album as al
+ON al.AlbumId=t.AlbumId
+JOIN Artist as a
+ON a.ArtistId=al.ArtistId
+where g.Name = 'Rock'
+GROUP BY a.Name ,al.ArtistId
+ORDER BY cnt DESC
+Limit 10
+
+/* Query 4 */rev1
+SELECT a.name,sum(il.UnitPrice * il.Quantity) as amt_spent
+FROM Artist as a
+JOIN Album as al
+ON a.ArtistId=al.ArtistId
+JOIN  Track as t
+ON al.AlbumId=t.AlbumId
+JOIN InvoiceLine as il
+ON il.TrackId=t.TrackId
+JOIN Invoice as i
+ON i.InvoiceId=il.InvoiceId
+GROUP BY a.Name
+ORDER BY amt_spent DESC
+LIMIT 10;
+
